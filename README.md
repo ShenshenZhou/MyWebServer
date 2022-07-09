@@ -12,23 +12,23 @@
 
 ```bash
 .
-├── bin			# 可执行文件
-├── build		# Makefile
-├── code		# 源代码
+├── bin  # 可执行文件
+├── build  # Makefile
+├── code  # 源代码
 │   ├── buffer
 │   ├── http
 │   ├── log
 │   ├── pool
 │   ├── server
 │   └── timer
-├── log			# 日志文件
-├── resources	# 静态资源
+├── log  # 日志文件
+├── resources  # 静态资源
 │   ├── css
 │   ├── fonts
 │   ├── images
 │   ├── js
 │   └── video
-└── webbench-1.5# 压力测试
+└── webbench-1.5  # 压力测试
 ```
 
 ## 项目功能
