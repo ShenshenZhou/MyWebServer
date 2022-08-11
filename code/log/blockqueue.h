@@ -48,8 +48,8 @@ private:
 
     bool isClose_;
 
+    // 条件变量：生产者消费者
     std::condition_variable condConsumer_;
-
     std::condition_variable condProducer_;
 };
 

@@ -43,10 +43,10 @@ WebServer::~WebServer() {
     SqlConnPool::Instance()->ClosePool();
 }
 
-// 设置监听的文件描述符和通信的文件描述符的模式
+// 设置事件模式（监听的Socket和通信的Socet）
 void WebServer::InitEventMode_(int trigMode) {
     listenEvent_ = EPOLLRDHUP;
-    connEvent_ = EPOLLONESHOT | EPOLLRDHUP;
+    connEvent_ = EPOLLONESHOT | EPOLLRDHUP;  // 每次事件都重新设置epolloneshot事件
     switch (trigMode)
     {
     case 0:
@@ -69,19 +69,23 @@ void WebServer::InitEventMode_(int trigMode) {
     HttpConn::isET = (connEvent_ & EPOLLET);
 }
 
+// 服务器启动
 void WebServer::Start() {
-    int timeMS = -1;  /* epoll wait timeout == -1 无事件将阻塞 */
+    int timeMS = -1;  // epoll wait timeout == -1 无事件将阻塞
     if(!isClose_) { LOG_INFO("========== Server start =========="); }
     // 服务器不关闭就一直运行
     while(!isClose_) {
         if(timeoutMS_ > 0) {
             timeMS = timer_->GetNextTick();
         }
-        int eventCnt = epoller_->Wait(timeMS);
+
+        // 调用epoll_wait返回事件数量
+        int eventCnt = epoller_->Wait(timeMS);  // 设置一个定时是为了减少wait调用次数
+
         for(int i = 0; i < eventCnt; i++) {
-            /* 处理事件 */
-            int fd = epoller_->GetEventFd(i);
-            uint32_t events = epoller_->GetEvents(i);
+            // 处理事件
+            int fd = epoller_->GetEventFd(i);  // 拿到文件描述符
+            uint32_t events = epoller_->GetEvents(i);  // 拿到事件
             if(fd == listenFd_) {
                 DealListen_();  // 处理监听的操作，接受客户端链接
             }

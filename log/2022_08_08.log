@@ -1,0 +1,17 @@
+2022-08-08 18:58:17.413073 [info] : ========== Server init ==========
+2022-08-08 18:58:17.413100 [info] : Port:1316, OpenLinger: false
+2022-08-08 18:58:17.413107 [info] : Listen Mode: ET, OpenConn Mode: ET
+2022-08-08 18:58:17.413109 [info] : LogSys level: 1
+2022-08-08 18:58:17.413111 [info] : srcDir: /home/webserve/MyWebServer/resources/
+2022-08-08 18:58:17.413113 [info] : SqlConnPool num: 12, ThreadPool num: 6
+2022-08-08 18:58:17.413116 [info] : ========== Server start ==========
+2022-08-08 18:58:20.342745 [info] : Client[18](192.168.253.1:52020) in, userCount:1
+2022-08-08 18:58:20.342865 [info] : Client[18] in!
+2022-08-08 18:58:20.345891 [info] : Client[19](192.168.253.1:52788) in, userCount:2
+2022-08-08 18:58:20.345970 [info] : Client[19] in!
+2022-08-08 18:58:20.353686 [info] : Client[20](192.168.253.1:53300) in, userCount:3
+2022-08-08 18:58:20.353781 [info] : Client[20] in!
+2022-08-08 18:58:20.353804 [info] : Client[21](192.168.253.1:53556) in, userCount:4
+2022-08-08 18:58:20.353829 [info] : Client[21] in!
+2022-08-08 18:58:20.353848 [info] : Client[22](192.168.253.1:53812) in, userCount:5
+2022-08-08 18:58:20.353853 [info] : Client[22] in!

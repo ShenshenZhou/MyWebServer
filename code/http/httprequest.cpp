@@ -104,39 +104,47 @@ void HttpRequest::ParseBody_(const string& line) {
     LOG_DEBUG("Body:%s, len:%d", line.c_str(), line.size());
 }
 
+// 加密操作：转换为十六进制
 int HttpRequest::ConverHex(char ch) {
     if(ch >= 'A' && ch <= 'F') return ch -'A' + 10;
     if(ch >= 'a' && ch <= 'f') return ch -'a' + 10;
     return ch;
 }
 
+// 处理POST请求：注册登录提交表单
 void HttpRequest::ParsePost_() {
+    // 判断是否是POST，内容是否是表单数据
     if(method_ == "POST" && header_["Content-Type"] == "application/x-www-form-urlencoded") {
-        ParseFromUrlencoded_();
+        // 解析表单信息
+        ParseFromUrlencoded_();  
         if(DEFAULT_HTML_TAG.count(path_)) {
             int tag = DEFAULT_HTML_TAG.find(path_)->second;
             LOG_DEBUG("Tag:%d", tag);
+            // 判断是否是注册登录页面
             if(tag == 0 || tag == 1) {
                 bool isLogin = (tag == 1);
+                // 如果是登录，需要验证用户账号信息
                 if(UserVerify(post_["username"], post_["password"], isLogin)) {
-                    path_ = "/welcome.html";
+                    path_ = "/welcome.html";  // 验证成功
                 } 
                 else {
-                    path_ = "/error.html";
+                    path_ = "/error.html";  // 验证失败
                 }
             }
         }
     }   
 }
 
+// 处理表单数据
+// eg: username=hello&password=hello
 void HttpRequest::ParseFromUrlencoded_() {
     if(body_.size() == 0) { return; }
 
-    string key, value;
+    string key, value;  // 定义键值对
     int num = 0;
-    int n = body_.size();
+    int n = body_.size();  // 请求体的大小
     int i = 0, j = 0;
-
+    // 遍历，以符号位分割，将键值对放入POST中
     for(; i < n; i++) {
         char ch = body_[i];
         switch (ch) {
@@ -148,7 +156,7 @@ void HttpRequest::ParseFromUrlencoded_() {
             body_[i] = ' ';
             break;
         case '%':
-            // 简单的加密操作
+            // 简单的加密操作  转换为十六进制加密
             num = ConverHex(body_[i + 1]) * 16 + ConverHex(body_[i + 2]);
             body_[i + 2] = num % 10 + '0';
             body_[i + 1] = num / 10 + '0';
@@ -171,6 +179,7 @@ void HttpRequest::ParseFromUrlencoded_() {
     }
 }
 
+// 验证用户账号信息
 bool HttpRequest::UserVerify(const string &name, const string &pwd, bool isLogin) {
     if(name == "" || pwd == "") { return false; }
     LOG_INFO("Verify name:%s pwd:%s", name.c_str(), pwd.c_str());
@@ -188,15 +197,16 @@ bool HttpRequest::UserVerify(const string &name, const string &pwd, bool isLogin
     /* 查询用户及密码 */
     snprintf(order, 256, "SELECT username, password FROM user WHERE username='%s' LIMIT 1", name.c_str());
     LOG_DEBUG("%s", order);
-
+    // mysql查询语句
     if(mysql_query(sql, order)) { 
         mysql_free_result(res);
         return false; 
     }
+    // mysql存放结果
     res = mysql_store_result(sql);
     j = mysql_num_fields(res);
     fields = mysql_fetch_fields(res);
-
+    // 
     while(MYSQL_ROW row = mysql_fetch_row(res)) {
         LOG_DEBUG("MYSQL ROW: %s %s", row[0], row[1]);
         string password(row[1]);

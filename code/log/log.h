@@ -14,10 +14,11 @@
 
 class Log {
 public:
+    // 日志初始化
     void init(int level, const char* path = "./log", 
                 const char* suffix =".log",
                 int maxQueueCapacity = 1024);
-
+    // 实例化一个对象
     static Log* Instance();
     static void FlushLogThread();
 
@@ -29,6 +30,7 @@ public:
     bool IsOpen() { return isOpen_; }
     
 private:
+    // 单例模式：私有化构造和析构
     Log();
     void AppendLogLevelTitle_(int level);
     virtual ~Log();
@@ -54,9 +56,9 @@ private:
     bool isAsync_;
 
     FILE* fp_;
-    std::unique_ptr<BlockDeque<std::string>> deque_; 
-    std::unique_ptr<std::thread> writeThread_;
-    std::mutex mtx_;
+    std::unique_ptr<BlockDeque<std::string>> deque_;  // 阻塞队列
+    std::unique_ptr<std::thread> writeThread_;  // 写日志线程
+    std::mutex mtx_;  // 锁
 };
 
 #define LOG_BASE(level, format, ...) \

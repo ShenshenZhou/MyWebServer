@@ -52,7 +52,7 @@ private:
 
     int port_;  // 端口
     bool openLinger_;  // 是否打开优雅关闭
-    int timeoutMS_;  /* 毫秒MS */
+    int timeoutMS_;  // 超时时间：毫秒MS
     bool isClose_;  // 是否关闭
     int listenFd_;  // 监听的文件描述符
     char* srcDir_;  // 资源目录
