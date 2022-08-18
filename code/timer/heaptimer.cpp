@@ -124,7 +124,7 @@ void HeapTimer::clear() {
     heap_.clear();
 }
 
-// 下一次清除
+// 更新下一次清除的时间
 int HeapTimer::GetNextTick() {
     tick();  // 清除已有的
     size_t res = -1;
